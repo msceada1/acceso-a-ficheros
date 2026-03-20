@@ -13,7 +13,7 @@ public class Ejercicio2 {
         try {
             System.out.println(Files.lines(fichero).collect(Collectors.joining(" ")));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());;
         }
     }
 }
