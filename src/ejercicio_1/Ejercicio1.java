@@ -14,6 +14,7 @@ public class Ejercicio1 {
 
         try (FileReader fr = new FileReader(f);
              BufferedReader br = new BufferedReader(fr)) {
+
             /*int contador = 0;
 
             while (br.readLine() != null) {
