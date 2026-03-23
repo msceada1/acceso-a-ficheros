@@ -38,22 +38,30 @@ public class Principal {
      */
     private static void crearFicheroDeTexto() {
         String nombre = MiEntradaSalida.leerCadena("Indica el nombre del fichero de texto: ");
+        Path directorio = Path.of("./src/ejercicio_5", nombre);
 
-        Path directorio = Path.of("./src/ejercicio_5", nombre); //ruta donde se creara el fichero de texto
+        // Eliminamos el BufferedReader del try-with-resources
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            Files.createFile(directorio); //el metodo ceateFile de la clase Files verifica si existia o no el fichero de texto
-            System.out.println("Escribe algo bonito: ");
+        try {
+            Files.createFile(directorio);
+            System.out.println("Escribe algo bonito (pulsa Enter vacío para terminar): ");
+
             String txt;
+            // Leemos mientras no sea nulo ni esté vacío
             while ((txt = br.readLine()) != null && !txt.isEmpty()) {
                 Files.writeString(directorio, txt + System.lineSeparator(), StandardOpenOption.APPEND);
-                //System.lineSeparator() respeta los espaciados y saltos de linea
             }
+
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Error al manejar el fichero: " + e.getMessage());
         }
+        // NOTA: No cerramos 'br' para no matar System.in
     }
 
+    /**
+     * Borra un fichero de texto lanzando una excepcion si no lo encuentra
+     */
     private static void borrarFicheroDeTexto() {
         String nombre = MiEntradaSalida.leerCadena("Indica el nombre del fichero que deseas borrar");
         Path directorio = Path.of("./src/ejercicio_5", nombre); //ruta donde se debe encontrar el fichero de texto a borrar.
@@ -64,6 +72,9 @@ public class Principal {
         }
     }
 
+    /**
+     * Muestra los ficheros de texto que tiene un directorio
+     */
     private static void mostrarLosFicherosDeUnaCarpeta() {
         String nombre = MiEntradaSalida.leerCadena("Indica el nombre de la carpeta: ");
         File carpeta = new File("./src/ejercicio_5", nombre);
@@ -111,4 +122,20 @@ public class Principal {
             }
         } while (opcion != 5);
     }
+
+    /*
+    Gemini ha dicho
+El problema principal es que estás utilizando un try-with-resources para gestionar el BufferedReader que envuelve a System.in.
+
+¿Por qué ocurre el error?
+Cuando el bloque try termina, Java cierra automáticamente el recurso definido entre los paréntesis.
+Al cerrar el BufferedReader, también se cierra el flujo subyacente: System.in.
+
+Una vez que System.in se cierra, no se puede volver a abrir mientras el programa esté en ejecución.
+La próxima vez que intentes leer algo (ya sea en este metodo o en otro usando MiEntradaSalida),
+el Scanner o Reader lanzará un NoSuchElementException porque el "grifo" de la entrada estándar está bloqueado.
+
+La Solución
+No debes cerrar los flujos que envuelven a System.in a menos que estés seguro de que no vas a pedir más datos en el programa.
+     */
 }
