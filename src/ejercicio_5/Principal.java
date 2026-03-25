@@ -124,6 +124,19 @@ public class Principal {
     }
 
     /*
+    public static void mostrarFicheros(){
+        Path ruta =  Path.of("src", "ejercicio5", "salidasEjercicio5");
+
+        try(Stream<Path> lista = Files.list(ruta)){
+            System.out.println("Archivos en "+ ruta.getFileName());
+            lista.forEach(p -> System.out.println(p.getFileName()));
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+   }
+     */
+
+    /*
     Gemini ha dicho
 El problema principal es que estás utilizando un try-with-resources para gestionar el BufferedReader que envuelve a System.in.
 
